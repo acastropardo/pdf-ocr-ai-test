@@ -16,8 +16,6 @@ spec:
   - name: serve-model
     container:
       image: "docker.io/acastropardo/pdf-currency-blur-iacore:latest"
-      command: ["python"]
-      args: ["pdf_currency_microservice_iacore.py"]
       ports:
         - containerPort: 8080
       env:
