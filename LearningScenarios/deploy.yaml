@@ -11,31 +11,30 @@ spec:
     kind: "Deployment"
     metadata:
       name: "pdf-currency-blur"
-      labels:
-        ai.sap.com/resourcePlan: "infer.s"
-    spec:
-      replicas: "1"
+      labels: "ai.sap.com/resourcePlan: infer.s"
+    spec: |
+      replicas: 1
       selector:
         matchLabels:
-          app: "pdf-currency-blur"
+          app: pdf-currency-blur
       template:
         metadata:
           labels:
-            app: "pdf-currency-blur"
-            ai.sap.com/resourcePlan: "infer.s"
+            app: pdf-currency-blur
+            ai.sap.com/resourcePlan: infer.s
         spec:
           containers:
-            - name: "inference"
-              image: "acastropardo/pdf-currency-blur-iacore:latest"
+            - name: inference
+              image: acastropardo/pdf-currency-blur-iacore:latest
               ports:
-                - containerPort: "8080"
+                - containerPort: 8080
               env:
-                - name: "PORT"
+                - name: PORT
                   value: "8080"
               resources:
                 requests:
-                  memory: "3Gi"
-                  cpu: "1500m"
+                  memory: 3Gi
+                  cpu: 1500m
                 limits:
-                  memory: "6Gi"
-                  cpu: "3000m"
+                  memory: 6Gi
+                  cpu: 3000m
