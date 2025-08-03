@@ -1,25 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: pdf-currency-blur-minimal
+  name: pdf-currency-blur-hybrid
   annotations:
-    scenarios.ai.sap.com/description: "PDF Currency Blur Microservice - Minimal"
-    scenarios.ai.sap.com/name: "PDF Processing Minimal"
-    executables.ai.sap.com/description: "Simple PDF currency blur service"
-    executables.ai.sap.com/name: "PDF Blur Minimal"
+    scenarios.ai.sap.com/description: "PDF Currency Blur Microservice - Hybrid"
+    scenarios.ai.sap.com/name: "PDF Processing Hybrid"
+    executables.ai.sap.com/description: "PDF currency blur with working approach"
+    executables.ai.sap.com/name: "PDF Blur Hybrid"
   labels:
     scenarios.ai.sap.com/id: "pdf-processing"
     ai.sap.com/version: "2.0.0"
 spec:
-  entrypoint: serve-model
+  entrypoint: test-microservice
   templates:
-  - name: serve-model
+  - name: test-microservice
     container:
-      image: "docker.io/acastropardo/pdf-currency-blur-iacore:latest"
+      image: "docker.io/python:3.9-slim"
       command: ["python"]
-      args: ["pdf_currency_microservice_iacore.py"]
-      ports:
-        - containerPort: 8080
+      args: ["-c", "print('Testing microservice startup'); import time; import os; print('PORT:', os.environ.get('PORT', '8080')); time.sleep(60)"]
       env:
         - name: PORT
           value: "8080"
