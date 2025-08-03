@@ -16,7 +16,7 @@ spec:
   - name: serve-model
     metadata:
       labels:
-        ai.sap.com/resourcePlan: "infer.s"
+        ai.sap.com/resourcePlan: "starter"
     container:
       image: "docker.io/acastropardo/pdf-currency-blur-iacore:latest"
       command: ["python"]
@@ -28,8 +28,8 @@ spec:
           value: "8080"
       resources:
         requests:
-          memory: "512Mi"
-          cpu: "250m"
+          memory: "256Mi"
+          cpu: "100m"
         limits:
-          memory: "1Gi"
-          cpu: "500m"
+          memory: "512Mi"
+          cpu: "200m"
