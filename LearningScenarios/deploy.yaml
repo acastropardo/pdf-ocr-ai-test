@@ -6,10 +6,36 @@ metadata:
     scenarios.ai.sap.com/id: "pdf-processing"
     ai.sap.com/version: "2.0.0"
 spec:
-  template:
-    apiVersion: "apps/v1"
-    kind: "Deployment"
+  template: |
+    apiVersion: apps/v1
+    kind: Deployment
     metadata:
-      name: "pdf-currency-blur"
-      labels: "ai.sap.com/resourcePlan=infer.s"
-    spec: "replicas: 1\nselector:\n  matchLabels:\n    app: pdf-currency-blur\ntemplate:\n  metadata:\n    labels:\n      app: pdf-currency-blur\n      ai.sap.com/resourcePlan: infer.s\n  spec:\n    containers:\n    - name: inference\n      image: acastropardo/pdf-currency-blur-iacore:latest\n      ports:\n      - containerPort: 8080\n      env:\n      - name: PORT\n        value: '8080'\n      resources:\n        requests:\n          memory: 3Gi\n          cpu: 1500m\n        limits:\n          memory: 6Gi\n          cpu: 3000m"
+      name: pdf-currency-blur
+      labels:
+        ai.sap.com/resourcePlan: infer.s
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: pdf-currency-blur
+      template:
+        metadata:
+          labels:
+            app: pdf-currency-blur
+            ai.sap.com/resourcePlan: infer.s
+        spec:
+          containers:
+          - name: inference
+            image: acastropardo/pdf-currency-blur-iacore:latest
+            ports:
+            - containerPort: 8080
+            env:
+            - name: PORT
+              value: "8080"
+            resources:
+              requests:
+                memory: 3Gi
+                cpu: 1500m
+              limits:
+                memory: 6Gi
+                cpu: 3000m
