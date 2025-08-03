@@ -1,41 +1,52 @@
 apiVersion: ai.sap.com/v1alpha1
 kind: ServingTemplate
 metadata:
-  name: pdf-currency-blur-minimal
+  name: pdf-currency-blur-workflow
   labels:
     scenarios.ai.sap.com/id: "pdf-processing"
     ai.sap.com/version: "2.0.0"
 spec:
-  template: |
-    apiVersion: apps/v1
-    kind: Deployment
+  template:
+    apiVersion: argoproj.io/v1alpha1
+    kind: WorkflowTemplate
     metadata:
-      name: pdf-currency-blur
-      labels:
-        ai.sap.com/resourcePlan: infer.s
+      name: pdf-currency-blur-workflow
     spec:
-      replicas: 1
-      selector:
-        matchLabels:
-          app: pdf-currency-blur
-      template:
-        metadata:
-          labels:
-            app: pdf-currency-blur
-            ai.sap.com/resourcePlan: infer.s
-        spec:
-          containers:
-          - name: inference
-            image: acastropardo/pdf-currency-blur-iacore:latest
-            ports:
-            - containerPort: 8080
-            env:
-            - name: PORT
-              value: "8080"
-            resources:
-              requests:
-                memory: 3Gi
-                cpu: 1500m
-              limits:
-                memory: 6Gi
-                cpu: 3000m
+      entrypoint: serve
+      templates:
+      - name: serve
+        resource:
+          action: apply
+          manifest: |
+            apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: pdf-currency-blur
+              labels:
+                ai.sap.com/resourcePlan: infer.s
+            spec:
+              replicas: 1
+              selector:
+                matchLabels:
+                  app: pdf-currency-blur
+              template:
+                metadata:
+                  labels:
+                    app: pdf-currency-blur
+                    ai.sap.com/resourcePlan: infer.s
+                spec:
+                  containers:
+                  - name: inference
+                    image: acastropardo/pdf-currency-blur-iacore:latest
+                    ports:
+                    - containerPort: 8080
+                    env:
+                    - name: PORT
+                      value: "8080"
+                    resources:
+                      requests:
+                        memory: 3Gi
+                        cpu: 1500m
+                      limits:
+                        memory: 6Gi
+                        cpu: 3000m
