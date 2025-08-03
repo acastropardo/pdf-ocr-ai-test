@@ -9,14 +9,14 @@ spec:
   inputs:
     parameters:
       - name: dpi
-        type: "int"
-        default: 200
+        type: "string"
+        default: "200"
       - name: blur_strength
-        type: "int"  
-        default: 51
+        type: "string"
+        default: "51"
       - name: confidence_threshold
-        type: "float"
-        default: 0.5
+        type: "string"
+        default: "0.5"
   template:
     apiVersion: apps/v1
     kind: Deployment
