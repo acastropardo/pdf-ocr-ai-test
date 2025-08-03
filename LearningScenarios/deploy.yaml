@@ -17,7 +17,7 @@ spec:
       - name: confidence_threshold
         type: "string"
         default: "0.5"
-  template:
+  template: |
     apiVersion: apps/v1
     kind: Deployment
     metadata:
