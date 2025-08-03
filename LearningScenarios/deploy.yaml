@@ -1,4 +1,4 @@
-apiVersion: ai.sap.com/v1alpha1
+apiVersion: argoproj.io/v1alpha1
 kind: ServingTemplate
 metadata:
   name: pdf-currency-blur
@@ -17,7 +17,7 @@ spec:
       - name: confidence_threshold
         type: "string"
         default: "0.5"
-  template:
+  template: |
     apiVersion: argoproj.io/v1alpha1
     kind: WorkflowTemplate
     metadata:
