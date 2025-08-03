@@ -54,3 +54,18 @@ spec:
                   limits:
                     memory: "6Gi"
                     cpu: "3000m"
+        ---
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: pdf-currency-blur-service
+          labels:
+            ai.sap.com/resourcePlan: "infer.s"
+        spec:
+          selector:
+            app: pdf-currency-blur
+          ports:
+          - port: 8080
+            targetPort: 8080
+            protocol: TCP
+          type: ClusterIP
