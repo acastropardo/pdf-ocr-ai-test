@@ -18,7 +18,9 @@ spec:
       labels:
         ai.sap.com/resourcePlan: "infer.s"
     container:
-      image: "acastropardo/pdf-currency-blur-iacore:latest"
+      image: "docker.io/acastropardo/pdf-currency-blur-iacore:latest"
+      command: ["python"]
+      args: ["pdf_currency_microservice_iacore.py"]
       ports:
         - containerPort: 8080
       env:
