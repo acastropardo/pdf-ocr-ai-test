@@ -12,23 +12,12 @@ spec:
         type: "int"
         default: 200
       - name: blur_strength
-        type: "int"
+        type: "int"  
         default: 51
       - name: confidence_threshold
         type: "float"
         default: 0.5
-inputs:
-    parameters:
-      - name: dpi
-        type: "int"
-        default: 200
-      - name: blur_strength
-        type: "int"
-        default: 51
-      - name: confidence_threshold
-        type: "float"
-        default: 0.5
-template:
+  template:
     apiVersion: apps/v1
     kind: Deployment
     metadata:
@@ -48,19 +37,18 @@ template:
         spec:
           containers:
             - name: inference
-              image: acastropardo/pdf-currency-blur:latest
+              image: "acastropardo/pdf-currency-blur-iacore:latest"
               ports:
                 - containerPort: 8080
               env:
                 - name: PORT
                   value: "8080"
-                - name: AI_RESOURCE_GROUP
-                  value: "pdf-processing"
-                - name: AI_CORE_SERVICE_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: ai-core-secret
-                      key: service-key
+                - name: DPI
+                  value: "{{inputs.parameters.dpi}}"
+                - name: BLUR_STRENGTH
+                  value: "{{inputs.parameters.blur_strength}}"
+                - name: CONFIDENCE_THRESHOLD
+                  value: "{{inputs.parameters.confidence_threshold}}"
               resources:
                 requests:
                   memory: "3Gi"
