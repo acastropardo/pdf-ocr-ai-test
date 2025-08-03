@@ -17,56 +17,84 @@ spec:
       - name: confidence_threshold
         type: "string"
         default: "0.5"
-  template: |
-    apiVersion: apps/v1
-    kind: Deployment
+  template:
+    apiVersion: argoproj.io/v1alpha1
+    kind: WorkflowTemplate
     metadata:
       name: pdf-currency-blur
       labels:
-        ai.sap.com/resourcePlan: "infer.s"
+        scenarios.ai.sap.com/id: "pdf-processing"
+        ai.sap.com/version: "2.0.0"
     spec:
-      replicas: 1
-      selector:
-        matchLabels:
-          app: pdf-currency-blur
-      template:
-        metadata:
-          labels:
-            app: pdf-currency-blur
-            ai.sap.com/resourcePlan: "infer.s"
-        spec:
-          containers:
-            - name: inference
-              image: "acastropardo/pdf-currency-blur-iacore:latest"
-              ports:
-                - containerPort: 8080
-              env:
-                - name: PORT
-                  value: "8080"
-                - name: DPI
-                  value: "{{inputs.parameters.dpi}}"
-                - name: BLUR_STRENGTH
-                  value: "{{inputs.parameters.blur_strength}}"
-                - name: CONFIDENCE_THRESHOLD
-                  value: "{{inputs.parameters.confidence_threshold}}"
-              resources:
-                requests:
-                  memory: "3Gi"
-                  cpu: "1500m"
-                limits:
-                  memory: "6Gi"
-                  cpu: "3000m"
-              livenessProbe:
-                httpGet:
-                  path: /health
-                  port: 8080
-                initialDelaySeconds: 60
-                periodSeconds: 30
-                timeoutSeconds: 10
-              readinessProbe:
-                httpGet:
-                  path: /health
-                  port: 8080
-                initialDelaySeconds: 30
-                periodSeconds: 15
-                timeoutSeconds: 5
+      entrypoint: pdf-currency-blur
+      templates:
+        - name: pdf-currency-blur
+          resource:
+            action: apply
+            manifest: |
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: pdf-currency-blur
+                labels:
+                  ai.sap.com/resourcePlan: "infer.s"
+              spec:
+                replicas: 1
+                selector:
+                  matchLabels:
+                    app: pdf-currency-blur
+                template:
+                  metadata:
+                    labels:
+                      app: pdf-currency-blur
+                      ai.sap.com/resourcePlan: "infer.s"
+                  spec:
+                    containers:
+                      - name: inference
+                        image: "acastropardo/pdf-currency-blur-iacore:latest"
+                        ports:
+                          - containerPort: 8080
+                        env:
+                          - name: PORT
+                            value: "8080"
+                          - name: DPI
+                            value: "{{inputs.parameters.dpi}}"
+                          - name: BLUR_STRENGTH
+                            value: "{{inputs.parameters.blur_strength}}"
+                          - name: CONFIDENCE_THRESHOLD
+                            value: "{{inputs.parameters.confidence_threshold}}"
+                        resources:
+                          requests:
+                            memory: "3Gi"
+                            cpu: "1500m"
+                          limits:
+                            memory: "6Gi"
+                            cpu: "3000m"
+                        livenessProbe:
+                          httpGet:
+                            path: /health
+                            port: 8080
+                          initialDelaySeconds: 60
+                          periodSeconds: 30
+                          timeoutSeconds: 10
+                        readinessProbe:
+                          httpGet:
+                            path: /health
+                            port: 8080
+                          initialDelaySeconds: 30
+                          periodSeconds: 15
+                          timeoutSeconds: 5
+              ---
+              apiVersion: v1
+              kind: Service
+              metadata:
+                name: pdf-currency-blur-service
+                labels:
+                  ai.sap.com/resourcePlan: "infer.s"
+              spec:
+                selector:
+                  app: pdf-currency-blur
+                ports:
+                  - port: 8080
+                    targetPort: 8080
+                type: ClusterIP
