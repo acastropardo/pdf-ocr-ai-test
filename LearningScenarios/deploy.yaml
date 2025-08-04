@@ -15,9 +15,9 @@ spec:
   templates:
   - name: serve-model
     container:
-      image: "docker.io/acastropardo/pdf-currency-blur-iacore:latest"
+      image: "docker.io/acastropardo/pdf-currency-blur-btp:latest"
       command: ["uvicorn"]
-      args: ["pdf_currency_microservice_iacore:app", "--host", "0.0.0.0", "--port", "8080"]
+      args: ["pdf_currency_microservice_btp:app", "--host", "0.0.0.0", "--port", "8080"]
       ports:
         - containerPort: 8080
       env:
@@ -25,8 +25,10 @@ spec:
           value: "8080"
       resources:
         requests:
-          memory: "512Mi"
+          memory: "4Gi"
           cpu: "250m"
+          storage: 10Gi
         limits:
-          memory: "1Gi"
+          memory: "8Gi"
           cpu: "500m"
+          storage: 10Gi
