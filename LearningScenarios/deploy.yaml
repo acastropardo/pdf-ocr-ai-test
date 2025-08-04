@@ -26,7 +26,5 @@ spec:
       resources:
         requests:
           memory: "4Gi"
-          storage: 10Gi
         limits:
           memory: "4Gi"
-          storage: 10Gi
